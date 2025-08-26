@@ -49,7 +49,6 @@ python catalog/catalog_service.py
 python services/controller_service.py
 python sensors/sensor_temp.py
 python sensors/sensor_volt.py
-python services/alerts_listener.py
 python services/actuator_fan.py
 python services/actuator_cutoff.py
 python services/notification_service.py
