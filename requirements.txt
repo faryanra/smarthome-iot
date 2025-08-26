@@ -1,0 +1,5 @@
+cherrypy
+paho-mqtt
+requests
+influxdb-client
+telepot

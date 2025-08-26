@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SmartHome Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+        }
+        .charts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 40px;
+            justify-content: center;
+        }
+        .chart-container {
+            flex: 1 1 45%;
+            min-width: 300px;
+            max-width: 600px;
+        }
+        canvas {
+            width: 100% !important;
+            height: auto !important;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                flex-basis: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h2>📊 SmartHome Sensor Dashboard</h2>
+    <p>Real-time data from temperature and voltage sensors.</p>
+
+    <div class="controls">
+        <label for="range">Time Range:</label>
+        <select id="range">
+            <option value="-5m">Last 5 min</option>
+            <option value="-30m">Last 30 min</option>
+            <option value="-2h">Last 2 hours</option>
+            <option value="-24h">Last 24 hours</option>
+        </select>
+        <button onclick="downloadJSON()">Export JSON</button>
+        <button onclick="downloadCSV()">Export CSV</button>
+    </div>
+    <hr>
+    <div class="charts">
+        <div class="chart-container">
+            <canvas id="tempChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <canvas id="voltChart"></canvas>
+        </div>
+    </div>
+
+    <script>
+        const tempCtx = document.getElementById('tempChart').getContext('2d');
+        const voltCtx = document.getElementById('voltChart').getContext('2d');
+        const rangeSelector = document.getElementById('range');
+
+        let jsonData = [];
+
+        const tempChart = new Chart(tempCtx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ label: 'Temperature (°C)', borderColor: 'red', backgroundColor: 'rgba(255,0,0,0.1)', data: [] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: false } } }
+        });
+
+        const voltChart = new Chart(voltCtx, {
+            type: 'line',
+            data: { labels: [], datasets: [{ label: 'Voltage (V)', borderColor: 'blue', backgroundColor: 'rgba(0,0,255,0.1)', data: [] }] },
+            options: { responsive: true, scales: { y: { beginAtZero: false } } }
+        });
+
+        async function fetchData() {
+            const timeRange = rangeSelector.value;
+            try {
+                const res = await fetch("https://eu-central-1-1.aws.cloud2.influxdata.com/api/v2/query?org=HelloCode%20Team", {
+                    method: "POST",
+                    headers: {
+                        "Authorization": "Token E1gldyRvV5_yQ7Gdj3z5LepQPZR6pDkVn2s8MmVr4srBhADlztOQrtkveF5Q8nIlNS6_6yVyUEdNDavl06zmIQ==",
+                        "Content-Type": "application/vnd.flux"
+                    },
+                    body: `
+                        from(bucket:"SmartHome")
+                        |> range(start: ${timeRange})
+                        |> filter(fn: (r) => r._measurement == "sensor_data")
+                        |> sort(columns: ["_time"], desc: true)
+                        |> limit(n: 100)
+                    `
+                });
+
+                const text = await res.text();
+                const rows = text.split("\n").slice(1).filter(x => x.includes(","));
+
+                jsonData = [];
+                const tempData = [], voltData = [], labels = [];
+
+                rows.reverse().forEach(row => {
+                    const cols = row.split(",");
+                    const time = new Date(cols[5]).toLocaleTimeString();
+                    const value = parseFloat(cols[6]);
+                    const sensor = cols[9];
+                    const entry = { time, sensor, value };
+                    jsonData.push(entry);
+
+                    if (sensor.startsWith("temp")) {
+                        tempData.push(value);
+                        labels.push(time);
+                    } else if (sensor.startsWith("volt")) {
+                        voltData.push(value);
+                    }
+                });
+
+                tempChart.data.labels = labels;
+                tempChart.data.datasets[0].data = tempData;
+                tempChart.update();
+
+                voltChart.data.labels = labels;
+                voltChart.data.datasets[0].data = voltData;
+                voltChart.update();
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                alert("Error loading data");
+            }
+        }
+
+        function downloadJSON() {
+            const blob = new Blob([JSON.stringify(jsonData, null, 2)], { type: "application/json" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "sensors.json";
+            link.click();
+        }
+
+        function downloadCSV() {
+            const csvRows = [["time", "sensor", "value"]];
+            jsonData.forEach(row => csvRows.push([row.time, row.sensor, row.value]));
+            const blob = new Blob([csvRows.map(r => r.join(",")).join("\n")], { type: "text/csv" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "sensors.csv";
+            link.click();
+        }
+
+        rangeSelector.addEventListener("change", fetchData);
+
+        fetchData();
+        setInterval(fetchData, 10000);
+    </script>
+</body>
+</html>

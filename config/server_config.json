@@ -1,0 +1,20 @@
+{
+  "catalog_url": "http://127.0.0.1:8081",
+  "broker": {
+    "host": "test.mosquitto.org",
+    "port": 1883,
+    "alert_topic": "smarthome/alerts"
+  },
+  "influxdb": {
+    "url": "https://eu-central-1-1.aws.cloud2.influxdata.com",
+    "token": "E1gldyRvV5_yQ7Gdj3z5LepQPZR6pDkVn2s8MmVr4srBhADlztOQrtkveF5Q8nIlNS6_6yVyUEdNDavl06zmIQ==",
+    "org": "HelloCode Team",
+    "bucket": "SmartHome"
+  },
+  "telegram": {
+    "bot_token": "8462278410:AAEImBgiw6Fo3fWlIPa2oZgGVJcqsaHF8bw",
+    "chat_id": "82706358",  
+    "notification_url": "http://127.0.0.1:1505/notify"
+    
+  }
+}

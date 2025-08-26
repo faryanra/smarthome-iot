@@ -1,0 +1,52 @@
+{
+  "project_name": "SmartHome",
+  "project_owner": "Faryan",
+  "broker": {
+    "host": "test.mosquitto.org",
+    "port": 1883
+  },
+  "device_list": [
+    {
+      "deviceID": "temp_B1_F1_U1",
+      "type": "temperature",
+      "building": "B1",
+      "floor": "F1",
+      "unit": "U1",
+      "threshold": 28.0,
+      "topic": "smarthome/B1/F1/U1/temp"
+    },
+    {
+      "deviceID": "actuator_fan_B1_F1_U1",
+      "type": "actuator",
+      "building": "B1",
+      "floor": "F1",
+      "unit": "U1",
+      "topic": "smarthome/alerts",
+      "actions": [
+        "fan_on",
+        "fan_off"
+      ]
+    },
+    {
+      "deviceID": "volt_B1_F1_U1",
+      "type": "voltage",
+      "building": "B1",
+      "floor": "F1",
+      "unit": "U1",
+      "threshold": 220.0,
+      "topic": "smarthome/B1/F1/U1/volt"
+    },
+    {
+      "deviceID": "actuator_cutoff_B1_F1_U1",
+      "type": "actuator",
+      "building": "B1",
+      "floor": "F1",
+      "unit": "U1",
+      "topic": "smarthome/alerts",
+      "actions": [
+        "power_cut",
+        "power_restore"
+      ]
+    }
+  ]
+}
