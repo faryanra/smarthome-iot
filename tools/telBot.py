@@ -67,7 +67,6 @@ def on_report(cid):
         bot.sendMessage(cid,"📊 Report:\n"+("\n".join(vals) if vals else "No data"))
     except Exception as e: bot.sendMessage(cid,f"⚠️ {e}")
 
-# === Add flow ===
 def ask_unit(cid,data): STATE[cid]={"mode":data["mode"],"data":data}; bot.sendMessage(cid,"🚪 Enter unit (e.g., U1):")
 def continue_steps(cid, msg):
     st = STATE[cid]
@@ -113,7 +112,6 @@ def handle(msg):
     elif cid in STATE: continue_steps(cid,t)
     else: bot.sendMessage(cid,"❓ Unknown.")
 
-# === Run ===
 MessageLoop(bot,{'chat':handle,'callback_query':on_callback}).run_as_thread()
 print("🤖 SmartHome Bot running...")
 while True: time.sleep(10)

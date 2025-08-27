@@ -35,10 +35,8 @@ def sync_actuators():
                         registered.add(act_id)
         except Exception as e:
             print("⚠️ Failed to sync fan actuators:", e)
-        time.sleep(30)  # check every 30s
+        time.sleep(30) 
 
-
-# --- MQTT Logic ---
 def on_connect(c, u, f, rc):
     print("🌀 [FAN] connected", rc)
     c.subscribe(TOPIC)

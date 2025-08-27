@@ -1,4 +1,7 @@
+<<<<<<< HEAD
 
+=======
+>>>>>>> recovered-main
 import os, sys, time, json, requests
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 import paho.mqtt.client as mqtt
@@ -93,7 +96,7 @@ def on_message(client, userdata, msg):
 
             if value > th:
                 if LAST_ALERTS.get(sensor_id) == value:
-                    return 
+                    return  
                 print(f"🚨 {base_msg} > {th} | ts: {ts}")
                 publish_alert(sensor_id, value, ts)
                 LAST_ALERTS[sensor_id] = value

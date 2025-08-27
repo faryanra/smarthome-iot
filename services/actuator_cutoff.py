@@ -53,7 +53,6 @@ def on_message(c, u, msg):
     except Exception as e:
         print("❌ [CUTOFF] error:", e)
 
-
 class HealthAPI:
     exposed = True
     @cherrypy.tools.json_out()

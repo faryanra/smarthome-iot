@@ -1,7 +1,7 @@
+
 # 🏠 SmartHome IoT Platform
 
-A simplified **IoT SmartHome platform** developed for academic use at Politecnico di Torino.  
-It integrates **REST (CherryPy)** and **MQTT (paho-mqtt)** in a microservices architecture, with sensors, actuators, Telegram notifications, and InfluxDB storage.
+An **IoT SmartHome platform** system for monitoring temperature and voltage in residential units, with automatic alerting and actuator response using **REST (CherryPy)** and **MQTT (paho-mqtt)** protocols.
 
 **Telegram BOT :** @IOT_SmartHome_bot
 
@@ -66,7 +66,6 @@ python tools/telBot.py
 ---
 
 ## 🔐 Telegram Token Warning
-**Do not share your real Telegram Bot Token publicly.**  
 To configure it safely, edit `server_config.json`:
 
 ```json
