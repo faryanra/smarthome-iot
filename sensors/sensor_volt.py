@@ -1,4 +1,3 @@
-
 import time, json, random, requests, threading
 import paho.mqtt.client as mqtt
 

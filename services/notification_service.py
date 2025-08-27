@@ -1,6 +1,5 @@
 import cherrypy, time, json, requests, os
 
-# --- Load config ---
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), '..', 'config', 'server_config.json')
 with open(CONFIG_FILE) as f:
     CONFIG = json.load(f)

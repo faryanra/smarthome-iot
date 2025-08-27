@@ -1,13 +1,3 @@
-# Endpoints:
-#  GET /sensors?offset=&limit=
-#  POST /sensors
-#  PUT /sensors/{sensor_id}
-#  DELETE /sensors/{sensor_id}
-#  GET /config/{sensor_id}
-#  GET /thresholds
-#  GET /thresholds/{sensor_id}
-#  PUT /thresholds/{sensor_id}  body: {"value": 28}
-
 import cherrypy, json, os, threading
 
 BASE = os.path.dirname(os.path.dirname(__file__))

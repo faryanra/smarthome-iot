@@ -1,17 +1,8 @@
-##############################################
-# MyInfluxDBclient.py - ذخیره‌سازی در Cloud InfluxDB با Token
-# [SRC]: Gluco + بازنویسی با influxdb-client (ساده و بدون پیچیدگی)
-##############################################
-
-# tools/MyInfluxDBclient.py
-# [SRC] based on Gluco-master_4/PubNRestTools/MyInfluxDBclient.py (simplified) + Influx Cloud API
-
 from influxdb_client import InfluxDBClient
 import time,json,os
 
 class MyInfluxClient:
     def __init__(self):
-        # Load config from JSON
         CONFIG_FILE = os.path.join(os.path.dirname(__file__), '..', 'config', 'server_config.json')
         with open(CONFIG_FILE) as f:
             CONFIG = json.load(f)
@@ -22,7 +13,6 @@ class MyInfluxClient:
         self.bucket = influx_config.get("bucket", "")
         self.url = influx_config.get("url", "")
 
-        # Connect
         self.client = InfluxDBClient(url=self.url, token=self.token, org=self.org)
         self.write_api = self.client.write_api()
 

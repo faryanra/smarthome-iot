@@ -1,4 +1,3 @@
-// [SRC]: Express + Chart.js Dashboard with InfluxDB Cloud via REST
 import express from 'express';
 import path from 'path';
 import fetch from 'node-fetch';
@@ -10,7 +9,6 @@ const port = 3000;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// Serve static dashboard.html
 app.use(express.static(__dirname));
 
 app.get('/api/data', async (req, res) => {

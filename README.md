@@ -1,3 +1,4 @@
+
 # 🏠 SmartHome IoT Platform
 
 A simplified **IoT SmartHome platform** developed for academic use at Politecnico di Torino.  

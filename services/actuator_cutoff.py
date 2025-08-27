@@ -1,8 +1,6 @@
-# [SRC] based on Class_examples/mqtt_examples/MyMQTT.py + cherrypy_webserver2.py
 import paho.mqtt.client as mqtt
 import cherrypy, json, os, requests, time, threading
 
-# --- Load config ---
 CONFIG_FILE = os.path.join(os.path.dirname(__file__), '..', 'config', 'server_config.json')
 with open(CONFIG_FILE) as f:
     CONFIG = json.load(f)
@@ -12,10 +10,8 @@ BROKER = CONFIG["broker"]
 TOPIC = BROKER.get("alert_topic", "smarthome/alerts")
 CUTOFF_THRESHOLD = 220.0
 
-# --- Track registered actuators ---
 registered = set()
 
-# --- Register actuators based on sensors ---
 def sync_actuators():
     global registered
     while True:
@@ -39,10 +35,8 @@ def sync_actuators():
                         registered.add(act_id)
         except Exception as e:
             print("⚠️ Failed to sync cutoff actuators:", e)
-        time.sleep(30)  # check every 30s
+        time.sleep(30)  
 
-
-# --- MQTT Logic ---
 def on_connect(c, u, f, rc):
     print("🔌 [CUTOFF] connected", rc)
     c.subscribe(TOPIC)
@@ -59,8 +53,6 @@ def on_message(c, u, msg):
     except Exception as e:
         print("❌ [CUTOFF] error:", e)
 
-
-# --- REST APIs ---
 class HealthAPI:
     exposed = True
     @cherrypy.tools.json_out()
@@ -69,7 +61,6 @@ class HealthAPI:
 
 
 if __name__ == "__main__":
-    # background sync thread
     t = threading.Thread(target=sync_actuators, daemon=True)
     t.start()
 
