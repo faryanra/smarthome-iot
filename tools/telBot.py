@@ -1,9 +1,7 @@
-# telBot.py - Telepot SmartHome Bot (Simplified CRUD + Report)
 import os, json, time, requests, telepot
 from telepot.loop import MessageLoop
 from telepot.namedtuple import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup
 
-# === Load config ===
 CONFIG_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'config', 'server_config.json'))
 with open(CONFIG_PATH) as f: CONFIG = json.load(f)
 
@@ -16,14 +14,12 @@ INFLUX_TOKEN, INFLUX_ORG, INFLUX_BUCKET = INFLUX["token"], INFLUX["org"], INFLUX
 bot = telepot.Bot(BOT_TOKEN)
 STATE = {}
 
-# === Menu ===
 MENU = ReplyKeyboardMarkup(keyboard=[
     ["➕ Add Sensor", "✏ Edit Sensor"],
     ["📊 Report", "📡 Project Info"],
     ["ℹ️ Help"]
 ], resize_keyboard=True)
 
-# === Catalog ops ===
 def get_sensors(): 
     try: return requests.get(f"{CATALOG_URL}/sensors").json().get("sensors", [])
     except: return []
@@ -42,7 +38,6 @@ def delete_sensor(cid, deviceID):
     ok = r.ok and r.json().get("ok")
     bot.sendMessage(cid, f"{'🗑 Deleted' if ok else '❌ Failed'} {deviceID}")
 
-# === Bot handlers ===
 def on_start(cid): STATE.pop(cid, None); bot.sendMessage(cid,"👋 Welcome!",reply_markup=MENU)
 def on_help(cid): bot.sendMessage(cid,"➕ Add Sensor\n✏ Edit Sensor\n🗑 Delete Sensor\n📊 Report\n📡 Project Info",reply_markup=MENU)
 
@@ -90,7 +85,6 @@ def continue_steps(cid, msg):
         add_or_update(cid, st["mode"], d)
         STATE.pop(cid, None)
 
-# === Callbacks ===
 def on_callback(msg):
     qid,cid,data=telepot.glance(msg,flavor="callback_query")
     if data.startswith("manage:"):
@@ -103,7 +97,6 @@ def on_callback(msg):
     elif data.startswith("delete:"): delete_sensor(cid,data.split(":")[1])
     elif data.startswith("type:"): t=data.split(":")[1]; STATE[cid]={"mode":"add","data":{"type":t}}; bot.sendMessage(cid,"🏢 Enter building:")
 
-# === Router ===
 def handle(msg):
     ctype,chat,cid=telepot.glance(msg)
     if ctype!="text": return
