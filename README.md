@@ -3,6 +3,8 @@
 A simplified **IoT SmartHome platform** developed for academic use at Politecnico di Torino.  
 It integrates **REST (CherryPy)** and **MQTT (paho-mqtt)** in a microservices architecture, with sensors, actuators, Telegram notifications, and InfluxDB storage.
 
+**Telegram BOT :** @IOT_SmartHome_bot
+
 ---
 
 ## 🚀 Features
@@ -63,11 +65,23 @@ python tools/telBot.py
 
 ---
 
+## 🔐 Telegram Token Warning
+**Do not share your real Telegram Bot Token publicly.**  
+To configure it safely, edit `server_config.json`:
+
+```json
+"telegram": {
+  "bot_token": "YOUR_TELEGRAM_BOT_TOKEN_HERE",
+  "chat_id": "YOUR_TELEGRAM_CHAT_ID",
+  "notification_url": "http://127.0.0.1:1505/notify"
+}
+```
+
+---
+
 ## 👤 Author
 - Project Owner: **Faryan**  
 - Master’s Degree: *Digital Skills for Sustainable Societal Transitions, Politecnico di Torino*  
 - Professors: Special thanks to **Pietro Rando Mazzarino** and **Lorenzo Bottaccioli**  
-
----
 
 📷 *See `Diagram.png` in the root folder for architecture overview.*
